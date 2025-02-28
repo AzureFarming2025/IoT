@@ -21,13 +21,13 @@ pip install esptool
 
 ### 2.2 Erase Flash Memory
 ```bash
-esptool.py --port COM3 erase_flash  # Use '/dev/ttyUSB0' for macOS
+esptool.py --port COM3 erase_flash  # Use '/dev/tty.usbserial-0001' for macOS
 ```
 
 ### 2.3 Flash MicroPython Firmware
 Download from [MicroPython](https://micropython.org/download/esp32/).
 ```bash
-esptool.py --port COM3 --baud 115200 write_flash -z 0x1000 ESP32_GENERIC-20241129-v1.24.1.bin
+esptool.py --port COM3 --baud 115200 write_flash -z 0x1000 firmware/ESP32_GENERIC-20241129-v1.24.1.bin
 ```
 
 ---
@@ -74,18 +74,6 @@ headers = {
 }
 response = urequests.post(url, json={"temperature": 23.5}, headers=headers)
 print(response.status_code)
-```
-
----
-
-## 🛡️ 5. Repository Structure
-```
-📂 IoT
-│── boot.py
-│── main.py
-│── ESP32_GENERIC-20241129-v1.24.1
-├── pymakr.conf
-└── README.md
 ```
 
 ---
