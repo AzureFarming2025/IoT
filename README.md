@@ -1,3 +1,20 @@
+# Virtualization & Simulation Plan  
+
+https://wokwi.com/projects/425327218373883905
+
+We initially used **Proteus 8** to validate circuit connections and power but didn’t test the code there.  
+To better match our **breadboard setup** and validate the code, we’ll now use **Wokwi**, leveraging custom chips to replicate actual device behavior.  
+
+#### **Next Steps**  
+- **Leander** will handle the **device connections**.  
+- **SAN** will integrate them with the **Azure-connected handler**.  
+
+#### **Notes**  
+- Previously, **Wokwi’s limited device support** was a blocker.  
+- We found a way to **add custom chips**, ensuring correct pin configuration and behavior.  
+- This will bring the simulation **closer to real hardware operation**.
+
+
 # 🚀 ESP32 MicroPython & Azure IoT Setup Guide
 
 This guide provides step-by-step instructions to set up MicroPython on an ESP32 board and connect it to Azure IoT. It covers macOS and Windows environments, including using the Pymakr plugin and Azure IoT Explorer.
