@@ -3,6 +3,6 @@ WIFI_SSID = "DLive_5F4A"
 WIFI_PASSWORD = "62CEED5F49"
 
 # Azure IoT Hub Credentials
-IOT_HUB_NAME = "SmartFarm"
-IOT_HUB_DEVICE_ID = "test_arduino"
-IOT_HUB_SAS_TOKEN = "SharedAccessSignature sr=SmartFarm.azure-devices.net&sig=uNsoffMxQZruE09cSqcBrFguDqZh1yr4%2BFS9YYz75hM%3D&skn=iothubowner&se=1740879041"
+IOT_HUB_NAME = "azurefarming-iothub"
+IOT_HUB_DEVICE_ID = "esp32-1"
+IOT_HUB_SAS_TOKEN = "SharedAccessSignature sr=azurefarming-iothub.azure-devices.net&sig=K4K9IHsgYF0CxFJoyDztErVibSnf5EmTm5pGBaDWrPo%3D&skn=iothubowner&se=1741964398"
