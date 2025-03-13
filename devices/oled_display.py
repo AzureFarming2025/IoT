@@ -1,44 +1,29 @@
-from machine import Pin, SPI
+from machine import Pin, I2C
 import time
-
 import sys
-import os
-# Add lib/ to the module search path
+
+# Add the 'lib' directory to the module search path
 sys.path.append("/lib")
-# Import the SH1106 module
-from sh1106 import SH1106_SPI
 
-# SPI Configuration
-SPI_SCK = 18
-SPI_MOSI = 23
-SPI_MISO = 19  # Not used in SPI OLED
+# Import SSD1306 OLED driver (Ensure ssd1306.py is in /lib/)
+from ssd1306 import SSD1306_I2C
 
-spi = SPI(1, baudrate=1000000, polarity=0, phase=0,
-          sck=Pin(SPI_SCK), mosi=Pin(SPI_MOSI), miso=Pin(SPI_MISO))
+# I2C Configuration (Adjust these if using different GPIOs)
+I2C_SCL = 22  # I2C Clock (SCL) - Default ESP32 SCL
+I2C_SDA = 21  # I2C Data (SDA) - Default ESP32 SDA
 
-# OLED Display Pins
-OLED_DC = Pin(13)
-OLED_RST = Pin(14)
-OLED_CS = Pin(12)
+# Initialize I2C interface
+i2c = I2C(0, scl=Pin(I2C_SCL), sda=Pin(I2C_SDA), freq=400000)
 
-def init_oled():
-    """Initialize SH1106 OLED display."""
-    OLED_RST.init(OLED_RST.OUT)
-    OLED_RST.value(0)
-    time.sleep(0.1)
-    OLED_RST.value(1)
-    time.sleep(0.1)
-
-    return SH1106_SPI(128, 64, spi, OLED_DC, OLED_RST, OLED_CS)
-
-oled = init_oled()
+# Initialize the OLED display
+oled = SSD1306_I2C(128, 64, i2c)
 
 def update_display(temp, hum):
-    """Update OLED with sensor readings."""
-    oled.fill(0)
+    """Update OLED with temperature and humidity readings."""
+    oled.fill(0)  # Clear screen
     if temp is not None and hum is not None:
-        oled.text(f"Temp: {temp}C", 10, 10)
-        oled.text(f"Hum: {hum}%", 10, 25)
+        oled.text(f"Temp: {temp:.1f}C", 10, 10)  # Display temperature
+        oled.text(f"Hum: {hum:.1f}%", 10, 25)   # Display humidity
     else:
-        oled.text("Sensor Error!", 10, 10)
-    oled.show()
+        oled.text("Sensor Error!", 10, 10)  # Display error message
+    oled.show()  # Refresh OLED screen
