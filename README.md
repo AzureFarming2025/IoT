@@ -44,7 +44,7 @@ esptool.py --port COM3 erase_flash  # Use '/dev/tty.usbserial-0001' for macOS
 ### 2.3 Flash MicroPython Firmware
 Download from [MicroPython](https://micropython.org/download/esp32/).
 ```bash
-esptool.py --port COM3 --baud 115200 write_flash -z 0x1000 firmware/ESP32_GENERIC-20241129-v1.24.1.bin
+esptool.py --port COM4 --baud 115200 write_flash -z 0x1000 firmware/ESP32_GENERIC-20241129-v1.24.1.bin
 ```
 
 ---

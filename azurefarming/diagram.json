@@ -19,7 +19,6 @@
       "left": -191.77,
       "attrs": { "i2cAddress": "0x3c" }
     },
-    { "type": "wokwi-dht22", "id": "dht1", "top": 29.1, "left": -226.2, "attrs": {} },
     { "type": "wokwi-servo", "id": "servo1", "top": -69.2, "left": -19.2, "attrs": {} },
     { "type": "wokwi-relay-module", "id": "relay1", "top": 192.2, "left": -48, "attrs": {} },
     { "type": "wokwi-rgb-led", "id": "rgb1", "top": -44, "left": 250.7, "attrs": {} },
@@ -51,15 +50,46 @@
       "left": 155.4,
       "attrs": { "volume": "0.1" }
     },
+    { "type": "chip-soil-sensor", "id": "chip1", "top": -66.18, "left": -388.8, "attrs": {} },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": -387.6,
+      "left": -783.4,
+      "attrs": { "color": "red" }
+    },
+    {
+      "type": "wokwi-dht22",
+      "id": "dht1",
+      "top": -412.5,
+      "left": -495,
+      "attrs": { "humidity": "54", "temperature": "-7.8" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": -404.4,
+      "left": 83.4,
+      "rotate": 90,
+      "attrs": { "color": "red" }
+    },
     {
       "type": "wokwi-resistor",
       "id": "r1",
-      "top": 90.35,
-      "left": 259.2,
-      "attrs": { "value": "1000" }
-    },
-    { "type": "chip-soil-sensor", "id": "chip1", "top": -66.18, "left": -388.8, "attrs": {} }
+      "top": -437.65,
+      "left": -614.4,
+      "attrs": { "value": "10000" }
+    }
   ],
-  "connections": [],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "dht1:GND", "esp:GND.1", "black", [ "v0" ] ],
+    [ "dht1:SDA", "esp:D32", "green", [ "v0" ] ],
+    [ "dht1:VCC", "esp:3V3", "red", [ "v19.2", "h105.6", "v-105.6" ] ],
+    [ "esp:D19", "r1:1", "magenta", [ "h0" ] ],
+    [ "led1:A", "r1:2", "magenta", [ "h0" ] ],
+    [ "led1:C", "esp:GND.2", "black", [ "h-96", "v-28.4" ] ]
+  ],
   "dependencies": {}
 }
