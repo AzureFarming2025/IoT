@@ -1,6 +1,6 @@
 # Wi-Fi Credentials
-WIFI_SSID = None
-WIFI_PASSWORD = None
+WIFI_SSID = "Wokwi-GUEST"
+WIFI_PASSWORD = ""
 
 # Azure IoT Hub Credentials
 IOT_HUB_NAME = "YourIoTHub"
