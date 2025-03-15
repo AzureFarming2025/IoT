@@ -1,0 +1,14 @@
+[wokwi]
+version = 1
+elf = "../firmware/ESP32_GENERIC-20241129-v1.24.1.elf"
+firmware = "../firmware/ESP32_GENERIC-20241129-v1.24.1.bin"
+rfc2217ServerPort = 4000
+
+# [[chip]]
+# name = 'soil-sensor'  # To use the chip in diagram.json, add a part with "soil-sensor" type.
+# binary = 'chips/soil-sensor.chip.c'
+
+# Forward http://localhost:8180 to port 80 on the simulated ESP32:
+# [[net.forward]]
+# from = "localhost:8180"
+# to = "target:80"

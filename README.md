@@ -1,103 +1,114 @@
-# Virtualization & Simulation Plan  
 
-https://wokwi.com/projects/425327218373883905
+# 🚀 ESP32 MicroPython & Azure IoT Quick Setup  
 
-We initially used **Proteus 8** to validate circuit connections and power but didn’t test the code there.  
-To better match our **breadboard setup** and validate the code, we’ll now use **Wokwi**, leveraging custom chips to replicate actual device behavior.  
+This guide covers **MicroPython setup on ESP32**, **Wokwi simulation**, and **Azure IoT connection**.
 
-#### **Next Steps**  
-- **Leander** will handle the **device connections**.  
-- **SAN** will integrate them with the **Azure-connected handler**.  
+## ⚡ Wokwi + ESP32 Simulation  
 
-#### **Notes**  
-- Previously, **Wokwi’s limited device support** was a blocker.  
-- We found a way to **add custom chips**, ensuring correct pin configuration and behavior.  
-- This will bring the simulation **closer to real hardware operation**.
+**1️⃣ Install `mpremote`**  
+```bash
+pip install mpremote
+```
+
+**2️⃣ Run the Simulation**
+
+This should be **done** **before** connecting the source code.
+
+1. Open `diagram.json` in Wokwi
+2. Click **"Simulate"**
+
+**3️⃣ Connect Source code to Wokwi**
+
+```bash
+python -m mpremote connect port:rfc2217://localhost:4000 run wokwi-virtual-test/main.py
+
+```
+This enables real-time testing in Wokwi.
 
 
-# 🚀 ESP32 MicroPython & Azure IoT Setup Guide
+---
+## 🚀 Virtualization & Simulation Plan  
 
-This guide provides step-by-step instructions to set up MicroPython on an ESP32 board and connect it to Azure IoT. It covers macOS and Windows environments, including using the Pymakr plugin and Azure IoT Explorer.
+🔗 [**Wokwi Simulation Project (Initial Setup)**](https://wokwi.com/projects/425327218373883905)
+
+→ Clone this as the **initial setup** to work locally on `Wokwi for vscode`. (Check the `wokwi-virtual-test` directory in this repo for updates.)
+
+We initially used **Proteus 8** for circuit validation but didn’t test the code there.  
+Now, to better match our **breadboard setup**, we’ll use **Wokwi** for **circuit simulation and code validation** before moving to hardware. 
+
+### 🔹 Using Custom Chips in Wokwi  
+
+Wokwi supports many **common components**, but if a needed chip **isn’t available**, we can create a **custom chip** to mimic its behavior.  
+
+Ideally, create **separate Wokwi projects** for each custom chip on website and **compile them individually**.  
+
+- Define **pin mappings & specs** based on [Wokwi docs](https://docs.wokwi.com/chips-api/chip-json).  
+- Generate **JSON config** and **c** file using GPT based on datasheets.  
+
+- For vscode(local) testings, the chip should be compiled: [Custom chip compiler](https://github.com/wokwi/wokwi-chip-clang-action)
+
+- Simulate **sensor values & interactions** for testing.  
+
+Custom chips **aren’t the main focus**, but they help **fill hardware gaps** in the virtual environment.
+
 
 ---
 
-## 📌 1. Prerequisites
-- **Python 3.x** installed ([python.org](https://www.python.org/downloads/))
-- **VSCode** with **Pymakr plugin** installed
+## 📌 ESP32 MicroPython Setup
+
+**1️⃣ Prerequisites**
+
+- **Python 3.x** → [Download](https://www.python.org/downloads/)
+- **VSCode** with **Pymakr plugin**
 - **ESP32 DOIT DevKit v1**
-- **Azure IoT Hub** set up with a registered device
+- **Azure IoT Hub** with a registered device
 
----
 
-## 💻 2. Install MicroPython on ESP32 (macOS/Windows)
+**2️⃣ Flash MicroPython Firmware**
 
-### 2.1 Install `esptool.py`
 ```bash
 pip install esptool
+esptool --port COM3 erase_flash  # Use 'esptool.py' and '/dev/tty.usbserial-0001' for macOS  
+esptool --port COM4 --baud 115200 write_flash -z 0x1000 firmware/ESP32_GENERIC-20241129-v1.24.1.bin
 ```
 
-### 2.2 Erase Flash Memory
-```bash
-esptool.py --port COM3 erase_flash  # Use '/dev/tty.usbserial-0001' for macOS
-```
+**3️⃣ Set Up Pymakr in VSCode**
 
-### 2.3 Flash MicroPython Firmware
-Download from [MicroPython](https://micropython.org/download/esp32/).
-```bash
-esptool.py --port COM4 --baud 115200 write_flash -z 0x1000 firmware/ESP32_GENERIC-20241129-v1.24.1.bin
-```
+- Install **Pymakr Plugin** → **Extensions > Search "Pymakr" > Install**
+- Create `pymakr.conf` *(already in repo)*:
 
+  ```bash
+  {
+    "address": "COM3",
+    "auto_connect": true,
+    "sync_folder": "src"
+  }
+  ```
 ---
 
-## 🧩 3. Set Up Pymakr Plugin (VSCode)
-### 3.1 Install Pymakr Plugin
-- Open **VSCode** > Extensions > Search `Pymakr` > Install
-- **Copy plugin settings** from the repository.
+## ☁️ Connect to Azure IoT Hub
 
-### 3.2 Create `pymakr.conf`
+**1️⃣ Install Azure IoT Explorer**
 
-🚨 I already setted up pymakr configuration file.
+🔗 [Download](https://github.com/Azure/azure-iot-explorer/releases)
 
-```json
-{
-  "address": "COM3",
-  "auto_connect": true,
-  "sync_folder": "src"
-}
-```
+**2️⃣ Get Device Connection String (SAS Token)**
 
-### 3.3 Test Connection with ESP32
-```bash
-mpremote connect COM3
->>> print("Hello, MicroPython!")
-```
+- **Easiest:** Use **Azure IoT Hub** VSCode extension to copy/generate it.
+- **Alternative:**
+    - **Azure Portal** → IoT Hub → Devices → Select Device → **Generate SAS Token**
+    - Copy the connection string.
 
----
+**3️⃣ Send Telemetry from ESP32**
 
-## ☁️ 4. Connect to Azure IoT Hub (Windows)
-### 4.1 Install Azure IoT Explorer
-- Download from [Azure IoT Explorer](https://github.com/Azure/azure-iot-explorer/releases).
-
-### 4.2 Get Device Connection String (SAS Token)
-- Log in to **Azure Portal** > IoT Hub > Devices > Select Device > **Generate SAS Token**
-- Copy the connection string.
-
-### 4.3 Send Telemetry from ESP32
 ```python
 import urequests
+
 url = "https://<your-iot-hub>.azure-devices.net/devices/<device-id>/messages/events?api-version=2020-09-30"
 headers = {
     "Authorization": "SharedAccessSignature sr=<sas-uri>&sig=<signature>&se=<expiry>&skn=<policy>"
 }
 response = urequests.post(url, json={"temperature": 23.5}, headers=headers)
 print(response.status_code)
+
 ```
-
----
-
-## 📝 Notes
-- Confirm `COM` port on Windows using `Device Manager`.
-- For macOS, replace `COM3` with `/dev/tty.usbserial-0001`.
-- Share this repository with your friend for the exact environment setup.
-
-🚀 Happy Coding!
