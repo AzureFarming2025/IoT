@@ -25,8 +25,8 @@
     {
       "type": "wokwi-led-ring",
       "id": "ring1",
-      "top": -546.56,
-      "left": 77.99,
+      "top": -364.16,
+      "left": 586.79,
       "attrs": { "pixels": "16" }
     },
     {
@@ -116,7 +116,7 @@
     [ "servo2:GND", "esp:GND.2", "black", [ "h-307.2", "v-134.4", "h-192" ] ],
     [ "servo2:PWM", "esp:12", "green", [ "h-230.4", "v-95.8", "h-249.6", "v0", "h0", "v0" ] ],
     [ "servo2:V+", "esp:3V3", "green", [ "h-336", "v124.9", "h-201.6" ] ],
-    [ "ring1:DOUT", "esp:5", "green", [ "v-9.6", "h-672" ] ]
+    [ "ring1:DIN", "esp:18", "green", [ "v0", "h-508.8" ] ]
   ],
   "serialMonitor": { "display": "terminal" },
   "dependencies": {}
