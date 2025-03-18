@@ -157,14 +157,14 @@ import OLED_LIB
 
 
 # PIN DECLARATION
-soil_moisture = ADC(Pin(12))
+soil_moisture = ADC(Pin(0))
 soil_moisture.atten(ADC.ATTN_11DB)
-dht_sensor = dht.DHT22(Pin(13))
-i2c = I2C(scl=Pin(23), sda=Pin(22))
+dht_sensor = dht.DHT22(Pin(27))
+i2c = I2C(scl=Pin(16), sda=Pin(2))
 oled = OLED_LIB.SSD1306_I2C(128, 64, i2c)
-water_servo = PWM(Pin(25), freq=50)
-sunscreen_servo = PWM(Pin(32), freq=50)
-relay = Pin(2, Pin.OUT)
+water_servo = PWM(Pin(13), freq=50)
+sunscreen_servo = PWM(Pin(12), freq=50)
+relay = Pin(26, Pin.OUT)
 leds = {
     "blue": Pin(19, Pin.OUT),
     "green": Pin(27, Pin.OUT),
