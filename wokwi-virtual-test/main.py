@@ -153,7 +153,7 @@ print("\n=====================\n")
 from machine import Pin, ADC, PWM, I2C
 import time
 import dht
-import OLED_LIB
+import ssd1306
 
 
 # PIN DECLARATION
@@ -161,7 +161,7 @@ soil_moisture = ADC(Pin(0))
 soil_moisture.atten(ADC.ATTN_11DB)
 dht_sensor = dht.DHT22(Pin(27))
 i2c = I2C(scl=Pin(16), sda=Pin(2))
-oled = OLED_LIB.SSD1306_I2C(128, 64, i2c)
+oled =  ssd1306.ssd1306_I2C(128, 64, i2c)
 water_servo = PWM(Pin(13), freq=50)
 sunscreen_servo = PWM(Pin(12), freq=50)
 relay = Pin(26, Pin.OUT)
