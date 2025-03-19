@@ -1,29 +1,23 @@
-# from machine import Pin, I2C
-# import time
-# import sys
+from machine import Pin, SoftI2C
+from lib.ssd1306 import SSD1306_I2C
 
-# # Add the 'lib' directory to the module search path
-# sys.path.append("/lib")
+class OLEDDisplay:
+    def __init__(self, scl_pin, sda_pin, width=128, height=64, freq=400000):
+        """Initialize OLED display with I2C."""
+        try:
+            i2c = SoftI2C(scl=Pin(scl_pin), sda=Pin(sda_pin), freq=freq)
+            self.oled = SSD1306_I2C(width, height, i2c)
+        except Exception as e:
+            print(f"[ERROR] Failed to initialize OLED: {e}")
+            self.oled = None
 
-# # Import SSD1306 OLED driver (Ensure ssd1306.py is in /lib/)
-# from ssd1306 import SSD1306_I2C
-
-# # I2C Configuration (Adjust these if using different GPIOs)
-# I2C_SCL = 22  # I2C Clock (SCL) - Default ESP32 SCL
-# I2C_SDA = 21  # I2C Data (SDA) - Default ESP32 SDA
-
-# # Initialize I2C interface
-# i2c = I2C(0, scl=Pin(I2C_SCL), sda=Pin(I2C_SDA), freq=400000)
-
-# # Initialize the OLED display
-# oled = SSD1306_I2C(128, 64, i2c)
-
-# def update_display(temp, hum):
-#     """Update OLED with temperature and humidity readings."""
-#     oled.fill(0)  # Clear screen
-#     if temp is not None and hum is not None:
-#         oled.text(f"Temp: {temp:.1f}C", 10, 10)  # Display temperature
-#         oled.text(f"Hum: {hum:.1f}%", 10, 25)   # Display humidity
-#     else:
-#         oled.text("Sensor Error!", 10, 10)  # Display error message
-#     oled.show()  # Refresh OLED screen
+    def update(self, temp, hum, moisture):
+        """Update OLED display with temperature & humidity."""
+        if not self.oled:
+            print("[WARNING] OLED is not initialized.")
+            return
+        self.oled.fill(0)
+        self.oled.text(f"Temp: {temp:.1f}C" if temp else "Sensor Error!", 8, 10)
+        self.oled.text(f"Hum: {hum:.1f}%" if hum else "", 8, 20)
+        self.oled.text(f"Moisture: {moisture:.1f}%" if hum else "", 8, 30)
+        self.oled.show()
