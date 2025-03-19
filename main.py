@@ -1,41 +1,114 @@
-import iot.wifi
-import iot.mqtt_client
-from iot.config import IOT_HUB_DEVICE_ID
-import devices.dht_sensor
-# import devices.oled_display
+import sys
+sys.path.append("/remote")
+sys.path.append("/remote/iot")
+sys.path.append("/remote/control")
+sys.path.append("/remote/lib")
+sys.path.append("/remote/devices")
+
 import time
-import ujson  # For JSON serialization
+from control.sensor_manager import SensorManager
+from control.actuator_manager import ActuatorManager
 
-# ✅ Connect Wi-Fi
-if iot.wifi.connect_wifi():
-    mqtt = iot.mqtt_client.connect_mqtt()
-    if mqtt:
-        while True:
-            temp, hum = devices.dht_sensor.read_dht()
-            # devices.oled_display.update_display(temp, hum)
+def run_sensor_test(sensors):
+    """🔍 Test sensor readings only."""
+    print("\n🔬 Running Sensor Test...")
+    temp, hum, moisture = sensors.read_sensors()
+    print(f"🌡 Temp: {temp}°C | 💧 Humidity: {hum}% | 🌱 Soil Moisture: {moisture}%")
 
-            if temp is not None and hum is not None:
-                message = ujson.dumps({
-                    "temperature": temp,
-                    "humidity": hum
-                })
-                
-                # 📤 Publish telemetry data
-                mqtt.publish(f"devices/{IOT_HUB_DEVICE_ID}/messages/events/", message)
-                print(f"📤 Sent telemetry: {message}")
+def run_actuator_test(actuators):
+    """🛠 Test actuator functions separately."""
+    print("\n⚙️ Running Actuator Test...")
 
-                # 📤 Update Device Twin Reported Properties
-                twin_update = ujson.dumps({
-                    "reported": {
-                        "temperature": temp,
-                        "humidity": hum
-                    }
-                })
-                mqtt.publish(f"$iothub/twin/PATCH/properties/reported/?$rid=1", twin_update)
-                print(f"📤 Sent Device Twin Update: {twin_update}")
+    # Test Water System
+    print("🚰 Testing Watering System...")
+    actuators.set_watering(True)
+    time.sleep(2)
+    actuators.set_watering(False)
 
-            time.sleep(10)  # Adjust as needed
+    # Test Sunscreen Adjustment
+    print("🌞 Testing Sunscreen Adjustment...")
+    actuators.adjust_sunscreen(36)  # Simulate temp at 36°C
+    time.sleep(2)
+
+    # Test Relay
+    print("⚡ Testing Relay...")
+    actuators.toggle_relay(True)
+    time.sleep(2)
+    actuators.toggle_relay(False)
+
+    # Test LEDs
+    print("💡 Testing LED Colors...")
+    actuators.set_led_color("red", brightness=0.8)
+    time.sleep(1)
+    actuators.set_led_color("green", brightness=0.5)
+    time.sleep(1)
+    actuators.set_led_color("yellow", brightness=0.3)
+    time.sleep(1)
+    actuators.set_led_color("off")
+
+    # Test Buzzer
+    print("🔊 Testing Buzzer...")
+    actuators.beep(2)
+
+def run_full_test():
+    """🔄 Run full test: Sensor + Actuator."""
+    print("🔬 Starting Full Sensor & Actuator Test...\n")
+
+    # ✅ Initialize Sensors & Actuators
+    sensors = SensorManager()
+    actuators = ActuatorManager()
+
+    while True:
+        try:
+            # ✅ Read Sensor Data
+            temp, hum, moisture = sensors.read_sensors()
+            actuators.set_display(temp, hum, moisture)
+
+            # ✅ Actuator Control Testing
+            if moisture < 25:
+                actuators.set_watering(True)
+            elif moisture > 75:
+                actuators.set_watering(False)
+
+            actuators.adjust_sunscreen(temp)
+
+            # ✅ LED & Buzzer Alerts
+            if moisture < 25:
+                actuators.set_led_color("red", brightness=0.9)  # Red LED (Dry)
+                actuators.beep(1)
+            elif moisture > 50:
+                actuators.set_led_color("green", brightness=0.7)  # Green LED (Optimal)
+            else:
+                actuators.set_led_color("yellow", brightness=0.5)  # Yellow LED (Low moisture)
+
+            time.sleep(5)  # Refresh cycle
+
+        except KeyboardInterrupt:
+            print("\n🛑 Test Stopped. Cleaning up...")
+            actuators.set_led_color("off")
+            actuators.set_watering(False)
+            actuators.toggle_relay(False)
+            break
+
+# ===========================
+# 🏁 SELECT TEST MODE
+# ===========================
+if __name__ == "__main__":
+    print("\n🔍 Choose Test Mode:")
+    print("1️⃣ Sensor Test")
+    print("2️⃣ Actuator Test")
+    print("3️⃣ Full System Test")
+    
+    choice = input("\nEnter option (1/2/3): ").strip()
+
+    sensors = SensorManager()
+    actuators = ActuatorManager()
+
+    if choice == "1":
+        run_sensor_test(sensors)
+    elif choice == "2":
+        run_actuator_test(actuators)
+    elif choice == "3":
+        run_full_test()
     else:
-        print("❌ MQTT connection failed.")
-else:
-    print("❌ Wi-Fi connection failed.")
+        print("❌ Invalid choice. Exiting...")

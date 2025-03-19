@@ -19,12 +19,15 @@ This should be **done** **before** connecting the source code.
 
 **3️⃣ Connect Source code to Wokwi**
 
-```bash
-python -m mpremote connect port:rfc2217://localhost:4000 run wokwi-virtual-test/main.py
-
-```
 This enables real-time testing in Wokwi.
 
+```bash
+python -m mpremote connect port:rfc2217://localhost:4000 mount ./ run main.py
+
+```
+**⚠️ Note:**
+This command only works when the Wokwi Simulator **window is open**. (Otherwise, the command is being pended)
+If the program requires input, it must be entered in the Wokwi Simulator terminal, not in the mpremote terminal.
 
 ---
 ## 🚀 Virtualization & Simulation Plan  
