@@ -17,7 +17,7 @@ HARDWARE_PINS = {
     "DHT": 27,
     "I2C_SCL": 15,
     "I2C_SDA": 2,
-    "SOIL_MOISTURE": 25,
+    "SOIL_MOISTURE": 33,
     "WATER_SERVO": 12,
     "SUNSCREEN_SERVO": 13,
     "RELAY": 2,
