@@ -65,10 +65,13 @@ if __name__ == "__main__":
     print("\n🔍 Running IoTBehavior Tests...")
     
     iot_behavior = IoTBehavior()
-   
-    test_mode_switching(iot_behavior)
+    iot_behavior.set_mode("manual")
+    # test_mode_switching(iot_behavior)
     # test_automate_mode(iot_behavior)
-    test_manual_mode(iot_behavior)
-    test_update_system(iot_behavior)
+    while True:
+        test_manual_mode(iot_behavior)
+        test_update_system(iot_behavior)
+        time.sleep(2.0)
+        # print("updated!")
 
     print("\n✅ All Tests Completed!")
