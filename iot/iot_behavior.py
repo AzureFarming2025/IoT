@@ -36,11 +36,13 @@ class IoTBehavior:
 
     def manual_mode(self):
         """Listen for MQTT commands to control actuators in manual mode."""
-        print("🛠️ Manual mode active. Waiting for actuator control commands...")
+        # print("🛠️ Manual mode active. Waiting for actuator control commands...")
+        pass
 
     def update_system(self):
         """Read sensors, send telemetry, and apply automation rules."""
         while True:
+            self.mqtt.client.check_msg()
             temp, hum, moisture = self.sensors.read_sensors()
 
             # ✅ Apply automation if enabled
@@ -48,14 +50,14 @@ class IoTBehavior:
                 self.automate_mode(temp, moisture)
             else:
                 self.manual_mode()
+            time.sleep(2)
+            # # ✅ Publish Telemetry Data every 2 seconds
+            # if self.mqtt:
+            #     telemetry_data = ujson.dumps({
+            #         "temperature": temp,
+            #         "humidity": hum,
+            #         "moisture": moisture
+            #     })
+            #     self.mqtt.publish_telemetry(telemetry_data)
 
-            # ✅ Publish Telemetry Data every 2 seconds
-            if self.mqtt:
-                telemetry_data = ujson.dumps({
-                    "temperature": temp,
-                    "humidity": hum,
-                    "moisture": moisture
-                })
-                self.mqtt.publish_telemetry(telemetry_data)
-
-            time.sleep(2)  # Telemetry interval
+            # time.sleep(2)  # Telemetry interval
