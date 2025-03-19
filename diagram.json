@@ -21,7 +21,7 @@
     },
     { "type": "wokwi-servo", "id": "servo1", "top": -645.2, "left": -28.8, "attrs": {} },
     { "type": "wokwi-relay-module", "id": "relay1", "top": 192.2, "left": -48, "attrs": {} },
-    { "type": "wokwi-rgb-led", "id": "rgb1", "top": -44, "left": 250.7, "attrs": {} },
+    { "type": "wokwi-rgb-led", "id": "rgb1", "top": -716, "left": -498.1, "attrs": {} },
     {
       "type": "wokwi-led-ring",
       "id": "ring1",
@@ -142,7 +142,12 @@
     [ "ldr2:GND", "esp:GND.2", "black", [ "h0" ] ],
     [ "ldr3:AO", "esp:21", "green", [ "h0" ] ],
     [ "esp:3V3", "ldr3:VCC", "green", [ "v0" ] ],
-    [ "esp:GND.1", "ldr3:GND", "black", [ "v0" ] ]
+    [ "esp:GND.1", "ldr3:GND", "black", [ "v0" ] ],
+    [ "rgb1:R", "esp:33", "green", [ "v86.4", "h-9.6" ] ],
+    [ "rgb1:G", "esp:32", "green", [ "v0" ] ],
+    [ "rgb1:B", "esp:34", "green", [ "v0" ] ],
+    [ "rgb1:COM", "esp:GND.1", "green", [ "v105.2", "h-57.5" ] ],
+    [ "ldr2:VCC", "bb1:bn.50", "", [ "$bb" ] ]
   ],
   "serialMonitor": { "display": "terminal" },
   "dependencies": {}
