@@ -1,4 +1,5 @@
 import time
+
 from devices.config import HARDWARE_PINS
 from devices.dht_sensor import DHTSensor
 from devices.soil_moisture import SoilMoistureSensor

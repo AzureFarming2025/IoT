@@ -7,14 +7,14 @@ class EEPROM:
         self.address = address
 
     def read_mode(self):
-        """Read mode from EEPROM (default: automate)."""
+        """Read mode from EEPROM (default: manual)."""
         try:
             mode = self.rtc.memory().decode()  # Read stored mode
             if mode in ["automate", "manual"]:
                 return mode
         except Exception:
             pass
-        return "automate"  # Default mode
+        return "manual"  # Default mode
 
     def write_mode(self, mode):
         """Write mode to EEPROM."""

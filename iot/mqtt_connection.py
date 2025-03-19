@@ -4,14 +4,16 @@ import ujson
 from umqtt.robust import MQTTClient
 from iot.config import IOT_HUB_NAME, IOT_HUB_DEVICE_ID, IOT_HUB_SAS_TOKEN
 
-class MQTTClient:
+class MQTT_CONNECTION:
     def __init__(self, iot_behavior):
         """Connect ESP32 to Azure IoT Hub using MQTT + SSL."""
         self.iot = iot_behavior
         self.client = self.connect_mqtt()
+        print("✅ MQTT connection built successful.")
         self.client.set_callback(self.on_message)
-        self.client.subscribe("devices/your-device/messages/devicebound/#")  # C2D Commands
-
+        self.client.subscribe(f"devices/{IOT_HUB_DEVICE_ID}/messages/devicebound/#")  # C2D Commands
+        print("✅ MQTT subscription successful.")
+        
     def connect_mqtt(self):
         """Establish MQTT connection to Azure IoT Hub."""
         try:
@@ -29,18 +31,38 @@ class MQTTClient:
             )
             client.reconnect()
             print("✅ Connected to Azure IoT Hub via MQTT with SSL!")
-            self.client = client
+            return client
         except Exception as e:
             print(f"❌ MQTT connection failed: {e}")
+            return None
+            
 
     def on_message(self, topic, msg):
-        """Handle incoming MQTT C2D commands."""
-        payload = ujson.loads(msg.decode())
-        if self.iot.mode == "manual":
-            if payload["actuator"] == "water":
-                self.iot.device_control.set_watering(payload["value"] == "on")
-            elif payload["actuator"] == "relay":
-                self.iot.device_control.toggle_relay(payload["value"] == "on")
+        """Handle incoming MQTT C2D commands for manual mode."""
+        try:
+            payload = ujson.loads(msg.decode())
+            print(f"📩 Received C2D message: {payload}")
+
+            if self.iot.mode == "manual":
+                actuator = payload.get("actuator")
+                value = payload.get("value") == "on"
+
+                if actuator == "water":
+                    self.iot.actuators.set_watering(value)
+                    print(f"💧 Watering system {'ON' if value else 'OFF'}")
+                elif actuator == "relay":
+                    self.iot.actuators.toggle_relay(value)
+                    print(f"⚡ Relay {'ON' if value else 'OFF'}")
+                elif actuator == "led":
+                    color = payload.get("color", "off")
+                    brightness = payload.get("brightness", 0.5)
+                    self.iot.actuators.set_led_color(color, brightness)
+                    print(f"💡 LED set to {color} (brightness: {brightness})")
+                else:
+                    print("❌ Unknown actuator command.")
+
+        except Exception as e:
+            print(f"❌ Failed to process C2D message: {e}")
 
     def publish_telemetry(self, message):
         """Publish telemetry data to Azure IoT Hub."""

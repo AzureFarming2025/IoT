@@ -16,6 +16,10 @@ class OLEDDisplay:
         if not self.oled:
             print("[WARNING] OLED is not initialized.")
             return
+        temp = temp or 0.0  # default: 0.0°C
+        hum = hum or 0.0  # default: 0.0%
+        moisture = moisture or 0.0  # default: 0.0%
+
         self.oled.fill(0)
         self.oled.text(f"Temp: {temp:.1f}C" if temp else "Sensor Error!", 8, 10)
         self.oled.text(f"Hum: {hum:.1f}%" if hum else "", 8, 20)

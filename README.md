@@ -39,21 +39,15 @@ If the program requires input, it must be entered in the Wokwi Simulator termina
 We initially used **Proteus 8** for circuit validation but didn’t test the code there.  
 Now, to better match our **breadboard setup**, we’ll use **Wokwi** for **circuit simulation and code validation** before moving to hardware. 
 
-### 🔹 Using Custom Chips in Wokwi  
+---
+## **📩 C2D Message Format for ESP32**
 
-Wokwi supports many **common components**, but if a needed chip **isn’t available**, we can create a **custom chip** to mimic its behavior.  
-
-Ideally, create **separate Wokwi projects** for each custom chip on website and **compile them individually**.  
-
-- Define **pin mappings & specs** based on [Wokwi docs](https://docs.wokwi.com/chips-api/chip-json).  
-- Generate **JSON config** and **c** file using GPT based on datasheets.  
-
-- For vscode(local) testings, the chip should be compiled: [Custom chip compiler](https://github.com/wokwi/wokwi-chip-clang-action)
-
-- Simulate **sensor values & interactions** for testing.  
-
-Custom chips **aren’t the main focus**, but they help **fill hardware gaps** in the virtual environment.
-
+| Actuator      | Example JSON Payload | Description |
+|--------------|----------------------|-------------|
+| **Water System** | ```{"actuator": "water", "value": "on"}``` | Turns the water system ON |
+| **Relay** | ```{"actuator": "relay", "value": "off"}``` | Turns the relay OFF |
+| **LED (Color & Brightness)** | ```{"actuator": "led", "value": "on", "color": "blue", "brightness": 0.5}``` | Sets LED to **blue** with **50% brightness** |
+| **Sunscreen Position** | ```{"actuator": "sunscreen", "value": "set", "angle": 45}``` | Adjusts sunscreen angle to **45°** |
 
 ---
 
