@@ -7,4 +7,4 @@ class ServoMotor:
 
     def set_angle(self, angle):
         """Set servo angle (0-180 degrees)."""
-        self.servo.duty(int(40 + (angle / 180) * 115))
+        self.servo.duty(int(0 + (angle / 180) * 115))

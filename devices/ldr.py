@@ -1,6 +1,6 @@
 from machine import Pin, ADC
 
-class SoilMoistureSensor:
+class LDRSensor:
     def __init__(self, pin):
         """Initialize the soil moisture sensor."""
         self.sensor = ADC(Pin(pin))

@@ -5,6 +5,7 @@ class Buzzer:
     def __init__(self, pin):
         """Initialize the buzzer on the given pin."""
         self.buzzer = PWM(Pin(pin))
+        self.buzzer.duty(0)
 
     def beep(self, freq=700, duration=0.5):
         """Make the buzzer beep at a given frequency and duration."""
