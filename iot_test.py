@@ -10,8 +10,8 @@ from iot.iot_behavior import IoTBehavior
 
 def main():
     iot = IoTBehavior()
-    iot.set_mode("automate")  # 수동 모드로 시작
-
+    iot.set_mode("automate")  # automate
+    
     print("🌐 Waiting for MQTT cloud messages... (manual mode)")
 
     while True:
