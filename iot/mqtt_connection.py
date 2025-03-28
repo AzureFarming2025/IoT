@@ -35,47 +35,26 @@ class MQTT_CONNECTION:
         except Exception as e:
             print(f"❌ MQTT connection failed: {e}")
             return None
-            
 
     def on_message(self, topic, msg):
-        """Handle incoming MQTT C2D commands for manual mode."""
+        print("📩 Raw message received")
         try:
-            payload = ujson.loads(msg.decode())
-            print(f"📩 Received C2D message: {payload}")
-
-            if self.iot.mode == "manual":
-                actuator = payload.get("actuator")
-                value = payload.get("value") == "on"
-
-                if actuator == "water":
-                    self.iot.actuators.set_watering(value)
-                    print(f"💧 Watering system {'ON' if value else 'OFF'}")
-                elif actuator == "relay":
-                    self.iot.actuators.toggle_relay(value)
-                    print(f"⚡ Relay {'ON' if value else 'OFF'}")
-                elif actuator == "led":
-                    color = payload.get("color", "off")
-                    brightness = payload.get("brightness", 0.5)
-                    self.iot.actuators.set_led_color(color, brightness)
-                    print(f"💡 LED set to {color} (brightness: {brightness})")
-                else:
-                    print("❌ Unknown actuator command.")
-
+            payload = ujson.loads(msg)
+            self.iot.route_command(payload)
         except Exception as e:
-            print(f"❌ Failed to process C2D message: {e}")
+            print("❌ Failed:", e)
 
     def publish_telemetry(self, message):
         """Publish telemetry data to Azure IoT Hub."""
-        self.client.publish(f"devices/{IOT_HUB_DEVICE_ID}/messages/events/", message)
-        print(f"📤 Sent telemetry: {message}")
+        telemetry = ujson.dumps(message)
+        self.client.publish(f"devices/{IOT_HUB_DEVICE_ID}/messages/events/", telemetry.encode('utf-8'))
+        print(f"📤 Sent telemetry: {telemetry}")
 
     def update_device_twin(self, message):
-        """ Update Device Twin Reported Properties. """
+        """Update Device Twin Reported Properties."""
         twin_update = ujson.dumps({
-            "reported": {
-                "temperature": temp,
-                "humidity": hum
-            }
+            "reported": message
         })
-        self.client.publish(f"$iothub/twin/PATCH/properties/reported/?$rid=1", twin_update)
+        self.client.publish(f"$iothub/twin/PATCH/properties/reported/?$rid=1", twin_update.encode('utf-8'))
         print(f"📤 Sent Device Twin Update: {twin_update}")
+

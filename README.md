@@ -44,10 +44,12 @@ Now, to better match our **breadboard setup**, we’ll use **Wokwi** for **circu
 
 | Actuator      | Example JSON Payload | Description |
 |--------------|----------------------|-------------|
-| **Water System** | ```{"actuator": "water", "value": "on"}``` | Turns the water system ON |
-| **Relay** | ```{"actuator": "relay", "value": "off"}``` | Turns the relay OFF |
-| **LED (Color & Brightness)** | ```{"actuator": "led", "value": "on", "color": "blue", "brightness": 0.5}``` | Sets LED to **blue** with **50% brightness** |
-| **Sunscreen Position** | ```{"actuator": "sunscreen", "value": "set", "angle": 45}``` | Adjusts sunscreen angle to **45°** |
+| **Water System** | ```{"actuator": "water", "value": "on"}``` | Turns the water system ON (up to 3 sec) or OFF |
+| **Lock** | ```{"actuator": "lock", "value": "off"}``` | Turns the Lock ON or OFF |
+| **Light (Color & Brightness)** | ```{"actuator": "led", "value": "on", "color": "(0, 0, 255)", "brightness": 0.5}``` | Sets ring LED to blue with **50% brightness** |
+| **Light (Preset)** | ```{"actuator": "led", "value": "on", "color": "preset", "option": "seedling"}``` | Sets ring LED to preset 'seedling' settings |
+| **Light (Status)** | ```{"actuator": "rgb_led", "value": "on", "state" : "ok" }``` | Sets status light to green color (others; error(red), wait(blue), warning(yellow), off(black) ..) |
+| **Buzzer (on)** | ```{"actuator": "buzzer", "value": "on", "times": 5 }``` | Play short beep sound for 3 times. |
 
 ---
 
