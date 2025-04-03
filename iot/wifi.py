@@ -1,5 +1,6 @@
 import network
 import time
+import ujson
 from iot.config import WIFI_SSID, WIFI_PASSWORD
 
 class WiFi:
@@ -9,7 +10,7 @@ class WiFi:
         sta_if.active(True)
         sta_if.connect(WIFI_SSID, WIFI_PASSWORD)
 
-        timeout = 15
+        timeout = 20
         while not sta_if.isconnected() and timeout > 0:
             print("⏳ Connecting to Wi-Fi...")
             time.sleep(1)
