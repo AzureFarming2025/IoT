@@ -10,7 +10,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 #  CSV file 
-df = pd.read_csv("C:/Users/valan/Downloads/sensor_data_with_sunlight.csv")
+df = pd.read_csv("C:\Users\valan\sample_sensor_data.csv")
 
 # scaling data
 scaler = MinMaxScaler()
