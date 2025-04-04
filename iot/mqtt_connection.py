@@ -18,12 +18,15 @@ class MQTT_CONNECTION:
         try:
             client = MQTTClient(
                 client_id=IOT_HUB_DEVICE_ID,
-                server=f"{IOT_HUB_NAME}.azure-devices.net",
+                server=f"{IOT_HUB_NAME}.azure-devices.net",  
                 user=f"{IOT_HUB_NAME}.azure-devices.net/{IOT_HUB_DEVICE_ID}/?api-version=2021-04-12",
                 password=IOT_HUB_SAS_TOKEN,
                 port=8883,
                 keepalive=3600,
-                ssl=True  # ✅ MicroPython only supports boolean flag
+                ssl=True  # ✅ MicroPython only supports boolean flaggitt
+
+
+                
             )
             client.connect()  # ✅ Required to establish the connection
             print("✅ Connected to Azure IoT Hub via MQTT+TLS!")
